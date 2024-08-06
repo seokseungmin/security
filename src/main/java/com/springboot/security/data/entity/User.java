@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Entity
+@Table
 public class User extends BaseEntity implements UserDetails {
 
     @Id

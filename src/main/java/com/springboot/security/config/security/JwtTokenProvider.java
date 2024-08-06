@@ -5,22 +5,16 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +24,8 @@ import java.util.List;
 public class JwtTokenProvider {
 
     private final UserDetailsService service;
-    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
     private final long tokenValidMillisecond = 1000L * 60 * 60;
-
+    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String createToken(String userUid, List<String> roles) {
         log.info("[createToken] 토큰 생성 시작");
@@ -94,7 +86,7 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
 
             return !claims.getBody().getExpiration().before(new Date());
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.info("[validateToken] 토큰 유효 체크 예외 발생");
 
             return false;
